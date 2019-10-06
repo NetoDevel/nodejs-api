@@ -1,6 +1,8 @@
 const mongoose = require('mongoose')
 const User = mongoose.model('User')
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const authConfig = require('../config/auth');
 
 module.exports = {
     async auth(req, res) {
@@ -13,6 +15,12 @@ module.exports = {
             return res.status(400).send({ error: 'Invalid password' })
         }
 
-        res.send({ user })
+        user.password = undefined;
+
+        const token = jwt.sign({ id: user.id }, authConfig.secret, {
+            expiresIn: 66400,
+        });
+
+        res.send({ user, token })
     }
 }
