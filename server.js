@@ -14,7 +14,9 @@ mongoose.connect(
 );
 requireDir('./src/model');
 
-
+app.use("/api", require("./src/controllers/UserController"))
+app.use("/api", require("./src/controllers/AuthController"))
 app.use("/api", require("./src/routes"));
+
 app.listen(3001);
 
